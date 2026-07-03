@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0f0f0f" />
-  <title>Tonight, I am at peace.</title>
+  <meta name="theme-color" content="#0d0d0d" />
+  <title>Harsh — Daily Gratitude</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
@@ -12,37 +12,108 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0d0d0d;
-      --surface: #161616;
-      --border: rgba(255,255,255,0.08);
-      --text: #e8e4dc;
-      --text-muted: rgba(232,228,220,0.45);
-      --accent: #c9a96e;
       --serif: 'DM Serif Display', Georgia, serif;
       --sans: 'Inter', system-ui, sans-serif;
     }
 
-    html { background: var(--bg); }
+    /* ── NIGHT THEME ── */
+    .night-theme {
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --border: rgba(255,255,255,0.08);
+      --text: #e8e4dc;
+      --text-muted: rgba(232,228,220,0.4);
+      --accent: #c9a96e;
+      --tab-active-bg: #1e1e1e;
+      --tab-inactive: rgba(232,228,220,0.25);
+      --closing-bg: #161616;
+    }
+
+    /* ── MORNING THEME ── */
+    .morning-theme {
+      --bg: #f7f4ef;
+      --surface: #efeae2;
+      --border: rgba(0,0,0,0.09);
+      --text: #1a1a18;
+      --text-muted: rgba(26,26,24,0.4);
+      --accent: #b5651d;
+      --tab-active-bg: #fff;
+      --tab-inactive: rgba(26,26,24,0.3);
+      --closing-bg: #efeae2;
+    }
+
+    html, body {
+      min-height: 100vh;
+      font-family: var(--sans);
+      transition: background 0.4s ease, color 0.4s ease;
+    }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--sans);
-      min-height: 100vh;
       display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 3rem 1.25rem 5rem;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 1.25rem 5rem;
     }
 
+    /* ── TAB BAR ── */
+    .tab-bar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      width: 100%;
+      max-width: 540px;
+      display: flex;
+      gap: 0;
+      padding: 1.25rem 0 0;
+      background: var(--bg);
+      transition: background 0.4s ease;
+    }
+
+    .tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 0;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--tab-inactive);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-bottom: 1.5px solid var(--border);
+      transition: color 0.25s ease, border-color 0.25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tab.active {
+      color: var(--accent);
+      border-bottom: 1.5px solid var(--accent);
+    }
+
+    .tab-icon { font-size: 15px; }
+
+    /* ── PAGE ── */
     .page {
       width: 100%;
       max-width: 540px;
+      padding-top: 2.5rem;
     }
 
+    /* ── PANELS ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── HEADER ── */
     .header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 2.75rem;
       padding-bottom: 2rem;
       border-bottom: 0.5px solid var(--border);
     }
@@ -51,11 +122,14 @@
       font-family: var(--serif);
       font-size: clamp(26px, 6vw, 34px);
       font-weight: 400;
-      font-style: italic;
       color: var(--text);
       line-height: 1.3;
       margin-bottom: 10px;
+      transition: color 0.4s ease;
     }
+
+    .morning-theme .header h1 { font-style: normal; }
+    .night-theme .header h1 { font-style: italic; }
 
     .header p {
       font-size: 13px;
@@ -64,10 +138,8 @@
       text-transform: uppercase;
     }
 
-    .entries {
-      display: flex;
-      flex-direction: column;
-    }
+    /* ── ENTRIES ── */
+    .entries { display: flex; flex-direction: column; }
 
     .entry {
       display: flex;
@@ -75,9 +147,6 @@
       align-items: flex-start;
       padding: 18px 0;
       border-bottom: 0.5px solid var(--border);
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeUp 0.5s ease forwards;
     }
 
     .entry:last-of-type { border-bottom: none; }
@@ -89,7 +158,7 @@
       background: var(--accent);
       margin-top: 11px;
       flex-shrink: 0;
-      opacity: 0.7;
+      opacity: 0.8;
     }
 
     .entry-text {
@@ -97,6 +166,7 @@
       font-size: clamp(16px, 4vw, 18px);
       line-height: 1.8;
       color: var(--text);
+      transition: color 0.4s ease;
     }
 
     .entry-text em {
@@ -104,14 +174,17 @@
       color: var(--accent);
     }
 
+    /* ── CLOSING ── */
     .closing {
       margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 0.5px solid var(--border);
+      padding: 1.5rem;
+      background: var(--closing-bg);
+      border-radius: 12px;
       text-align: center;
+      border: 0.5px solid var(--border);
     }
 
-    .closing p {
+    .night-theme .closing p {
       font-family: var(--serif);
       font-size: clamp(15px, 3.5vw, 17px);
       font-style: italic;
@@ -119,108 +192,233 @@
       line-height: 2;
     }
 
+    .morning-theme .closing p {
+      font-family: var(--serif);
+      font-size: clamp(16px, 4vw, 19px);
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    /* ── DATE ── */
     .date {
-      margin-top: 2.5rem;
+      margin-top: 2rem;
       text-align: center;
       font-size: 12px;
       color: var(--text-muted);
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      padding-bottom: 1rem;
     }
 
+    /* ── FADE ANIMATION ── */
     @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .entry:nth-child(1)  { animation-delay: 0.05s; }
-    .entry:nth-child(2)  { animation-delay: 0.12s; }
-    .entry:nth-child(3)  { animation-delay: 0.19s; }
-    .entry:nth-child(4)  { animation-delay: 0.26s; }
-    .entry:nth-child(5)  { animation-delay: 0.33s; }
-    .entry:nth-child(6)  { animation-delay: 0.40s; }
-    .entry:nth-child(7)  { animation-delay: 0.47s; }
-    .entry:nth-child(8)  { animation-delay: 0.54s; }
-    .entry:nth-child(9)  { animation-delay: 0.61s; }
-    .entry:nth-child(10) { animation-delay: 0.68s; }
+    .panel.active .entry {
+      opacity: 0;
+      animation: fadeUp 0.4s ease forwards;
+    }
+
+    .panel.active .entry:nth-child(1)  { animation-delay: 0.04s; }
+    .panel.active .entry:nth-child(2)  { animation-delay: 0.10s; }
+    .panel.active .entry:nth-child(3)  { animation-delay: 0.16s; }
+    .panel.active .entry:nth-child(4)  { animation-delay: 0.22s; }
+    .panel.active .entry:nth-child(5)  { animation-delay: 0.28s; }
+    .panel.active .entry:nth-child(6)  { animation-delay: 0.34s; }
+    .panel.active .entry:nth-child(7)  { animation-delay: 0.40s; }
+    .panel.active .entry:nth-child(8)  { animation-delay: 0.46s; }
+    .panel.active .entry:nth-child(9)  { animation-delay: 0.52s; }
+    .panel.active .entry:nth-child(10) { animation-delay: 0.58s; }
 
     @media (prefers-reduced-motion: reduce) {
-      .entry { opacity: 1; transform: none; animation: none; }
+      .panel.active .entry { opacity: 1; transform: none; animation: none; }
     }
   </style>
 </head>
-<body>
+<body class="night-theme">
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab" id="tab-morning" onclick="switchTab('morning')">
+      <span class="tab-icon">☀️</span> Morning
+    </button>
+    <button class="tab active" id="tab-night" onclick="switchTab('night')">
+      <span class="tab-icon">🌙</span> Evening
+    </button>
+  </div>
+
   <div class="page">
 
-    <div class="header">
-      <h1>Tonight, I am at peace.</h1>
-      <p>Breathe between each one</p>
+    <!-- ══════════════════════════════ MORNING PANEL ══════════════════════════════ -->
+    <div class="panel" id="panel-morning">
+      <div class="header">
+        <h1>Today, I am ready.</h1>
+        <p>Read it. Mean it. Go.</p>
+      </div>
+
+      <div class="entries">
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I have been building toward this for seven years. Every room I walk into today, <em>I have earned my seat at the table.</em></p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I think clearly under pressure. When things get complex, I do not freeze — I find the thread and pull. <em>That is what I do.</em></p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I came to this country with nothing and built half a million dollars from zero. If I could do that, <em>I can handle whatever is on my calendar today.</em></p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I am a Senior TPM at one of the most demanding companies in the world. That title was not given — it was earned through delivery, credibility, and hard work.</p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I know how to move people, programs, and decisions forward. <em>That skill is rare.</em> I do not underestimate it.</p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">My body is strong, my mind is sharp, and I slept. I am showing up today at full capacity — <em>not half, full.</em></p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">Whatever uncertainty exists outside this moment — visa, relationship, future — it does not live in today. Today is mine to execute.</p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I have rebuilt from zero before. That means nothing today can break me permanently. <em>I always have a next move.</em></p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I do not need to be perfect today. I need to be present, sharp, and honest. <em>That has always been enough.</em></p>
+        </div>
+
+      </div>
+
+      <div class="closing">
+        <p>Now close this.<br>Go be the person these words describe.</p>
+      </div>
+
+      <div class="date" id="date-morning"></div>
     </div>
 
-    <div class="entries">
-
-      <div class="entry">
-        <span class="dot"></span>
-        <p class="entry-text">I have a place to sleep tonight, food in my body, and rest waiting for me. <em>Right now, in this moment, I am safe.</em></p>
+    <!-- ══════════════════════════════ NIGHT PANEL ══════════════════════════════ -->
+    <div class="panel active" id="panel-night">
+      <div class="header">
+        <h1>Tonight, I am at peace.</h1>
+        <p>Breathe between each one</p>
       </div>
 
-      <div class="entry">
-        <span class="dot"></span>
-        <p class="entry-text">I have parents who are healthy and love me. That love exists right now, unconditionally, regardless of anything else in my life.</p>
+      <div class="entries">
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I have a place to sleep tonight, food in my body, and rest waiting for me. <em>Right now, in this moment, I am safe.</em></p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I have parents who are healthy and love me. That love exists right now, unconditionally, regardless of anything else in my life.</p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I have a body that is strong and healthy. I can walk, run, and lift. <em>This is mine, and it is enough.</em></p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I came to this country in 2016 with nothing and built a life worth half a million dollars. I know how to start from zero. <em>I have already done it.</em></p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I have skills that no circumstance can take from me. If everything reset tomorrow, I would know exactly what to do. I have rebuilt before. I would rebuild again.</p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I have grown from a support engineer to a Senior TPM over seven years of steady, deliberate work. That growth lives in me — not in a title, not in a company, <em>in me.</em></p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">Whatever comes next — visa, job, relationship, country — I will handle it. Not because I am fearless, but because I always have. <em>That is who I am.</em></p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I do not need everything to be certain to feel okay. I only need to trust myself. <em>And I do.</em></p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">A relationship, if it is meant to be, will find its way. My life is not on hold. It is full, it is moving, and it is mine.</p>
+        </div>
+
+        <div class="entry">
+          <span class="dot"></span>
+          <p class="entry-text">I have enough. I am enough. Whatever tomorrow holds, <em>I will be enough for that too.</em></p>
+        </div>
+
       </div>
 
-      <div class="entry">
-        <span class="dot"></span>
-        <p class="entry-text">I have a body that is strong and healthy. I can walk, run, and lift. <em>This is mine, and it is enough.</em></p>
+      <div class="closing">
+        <p>I did not get here by luck.<br>I got here by showing up, again and again.<br>Tonight, I rest. Tomorrow, I continue.</p>
       </div>
 
-      <div class="entry">
-        <span class="dot"></span>
-        <p class="entry-text">I came to this country in 2016 with nothing and built a life worth half a million dollars. I know how to start from zero. <em>I have already done it.</em></p>
-      </div>
-
-      <div class="entry">
-        <span class="dot"></span>
-        <p class="entry-text">I have skills that no circumstance can take from me. If everything reset tomorrow, I would know exactly what to do. I have rebuilt before. I would rebuild again.</p>
-      </div>
-
-      <div class="entry">
-        <span class="dot"></span>
-        <p class="entry-text">I have grown from a support engineer to a Senior TPM over seven years of steady, deliberate work. That growth lives in me — not in a title, not in a company, <em>in me.</em></p>
-      </div>
-
-      <div class="entry">
-        <span class="dot"></span>
-        <p class="entry-text">Whatever comes next — visa, job, relationship, country — I will handle it. Not because I am fearless, but because I always have. <em>That is who I am.</em></p>
-      </div>
-
-      <div class="entry">
-        <span class="dot"></span>
-        <p class="entry-text">I do not need everything to be certain to feel okay. I only need to trust myself. <em>And I do.</em></p>
-      </div>
-
-      <div class="entry">
-        <span class="dot"></span>
-        <p class="entry-text">A relationship, if it is meant to be, will find its way. My life is not on hold. It is full, it is moving, and it is mine.</p>
-      </div>
-
-      <div class="entry">
-        <span class="dot"></span>
-        <p class="entry-text">I have enough. I am enough. Whatever tomorrow holds, <em>I will be enough for that too.</em></p>
-      </div>
-
+      <div class="date" id="date-night"></div>
     </div>
-
-    <div class="closing">
-      <p>I did not get here by luck.<br>I got here by showing up, again and again.<br>Tonight, I rest. Tomorrow, I continue.</p>
-    </div>
-
-    <div class="date" id="date"></div>
 
   </div>
 
   <script>
-    const d = new Date();
-    document.getElementById('date').textContent = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    // Set dates
+    const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    document.getElementById('date-morning').textContent = dateStr;
+    document.getElementById('date-night').textContent = dateStr;
+
+    // Auto-switch to morning tab between 5am–11am
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 11) switchTab('morning');
+
+    function switchTab(tab) {
+      const isMorning = tab === 'morning';
+
+      // Theme
+      document.body.className = isMorning ? 'morning-theme' : 'night-theme';
+      document.querySelector('meta[name="theme-color"]').content = isMorning ? '#f7f4ef' : '#0d0d0d';
+
+      // Tabs
+      document.getElementById('tab-morning').classList.toggle('active', isMorning);
+      document.getElementById('tab-night').classList.toggle('active', !isMorning);
+
+      // Panels — reset animation by re-cloning
+      const activePanel = document.getElementById(isMorning ? 'panel-morning' : 'panel-night');
+      const inactivePanel = document.getElementById(isMorning ? 'panel-night' : 'panel-morning');
+
+      inactivePanel.classList.remove('active');
+
+      // Force reflow to restart animations
+      activePanel.classList.remove('active');
+      void activePanel.offsetWidth;
+      activePanel.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   </script>
+
 </body>
 </html>
